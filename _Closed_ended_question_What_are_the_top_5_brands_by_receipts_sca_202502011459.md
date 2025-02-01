@@ -1,0 +1,7 @@
+|brand|count_receipt_scanned|
+|-----|---------------------|
+|DOVE|6|
+|NERDS CANDY|6|
+|COCA-COLA|4|
+|GREAT VALUE|4|
+|HERSHEY'S|4|
