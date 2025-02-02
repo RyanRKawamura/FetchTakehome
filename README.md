@@ -5,7 +5,7 @@
 ## **1 Explore the Data**
 Review the unstructured csv files and answer the following questions with code that supports your conclusions:
 
-#### a) Are there any quality issues present?
+### a) Are there any quality issues present?
 ### **Products** Table
 **#1**: Many Null Values, especially in CATEGORY_4. This is an issue because that means we have incomplete data. 
 - CATEGORY_1: 111 Null Values
@@ -63,4 +63,18 @@ b) Same barcode, different product/data
 **#3**: Duplicate Rows 
 This indicates a data quality issue because there are multiple of the same column. The receipt_id being the same makes sense because in a receipt you can purchase multiple items, but instead of there only being one row for an item and a quantity of that product, there are times where there are multiple duplicate rows where the one final_sale row has a value and the first one is blank. This could be a result of a sale or buy 1 get 1 free, so this is a question I would like to inquire about, but for now I will determine it as a data quality issue
 <img width="1183" alt="Screenshot 2025-02-01 at 5 26 33 PM" src="https://github.com/user-attachments/assets/01e64a54-d133-4b9e-ab97-5b71e1372adb" />
+
+### b) Are there any fields that are challenging to understand?
+
+**User**: No, I believe all of the data fields in the User dataframe are easily understandable. One suggestion, however, could be to change the data field "ID" to "USER_ID" to maintain consistency of column names between the different dataframes because it is referred to as USER_ID in the transaction table.
+
+**Transaction**: Yes
+- **FINAL_QUANTITY** is hard to understand because it is not clear what is being referred to as 'quantity.' When first looking at the column name, I thought it referred to how many items were purchased. However, there are decimal values in the column, indicating that 'quantity' is not referring to the number of items purchased because one cannot purchase a 0.47 of an item (for instance). Also, there are values of 0 even though it is in the transactions dataframe, indicating that a transaction was made. Thus, the "Final Quantity" data field is hard to understand. 
+
+**Products**: No, I believe the data fields are easily understandable. It could be made clearer that category 1-4 increases in how specific it describes the item, but I do not think this is completely necessary. 
+
+
+## **2 Provide SQL Queries**
+
+```
 
