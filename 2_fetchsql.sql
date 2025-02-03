@@ -69,5 +69,5 @@ SELECT 		s.user_id,
     		sc.number_of_scans
 FROM 		SpendingCTE AS s
 JOIN 		ScanningCTE AS sc ON s.user_id = sc.user_id
-WHERE		s.percentile_spent = 1 OR sc.percentile_scans = 1
+WHERE		s.percentile_spent = 1 AND sc.percentile_scans = 1
 ORDER BY 	number_of_scans desc, total_spent desc;
