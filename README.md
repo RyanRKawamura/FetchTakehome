@@ -57,7 +57,7 @@ b) Same barcode, different product/data
 - BARCODE : 5762 Null Values
 - FINAL_QUANTITY : 0 Null Values
 - FINAL_SALE : 0 Null Values
-  
+
 <img width="585" alt="Screenshot 2025-02-03 at 2 18 06 PM" src="https://github.com/user-attachments/assets/7969c21c-8aed-4571-b469-0e9c78055ee9" />
 
 **#2**: There is inconsistent data type for the FINAL_QUANTITY column, with 0 being a string type while the other values are decimal values of float type. This makes the data type inconsistent. 
@@ -180,15 +180,35 @@ I hope you are having a great Monday! Just wanted to send you an update on the d
 
 Issues
 1) Substantial Null Values Present: There are a significant amount of null values present in the data indicating a lack of data as well as inconsistent data that can potentially affect the accuracy of future analyses.
+
+
+	Products
+
+	<img width="591" alt="Screenshot 2025-02-01 at 5 20 26 PM" src="https://github.com/user-attachments/assets/fe7ab4e5-504c-4832-a07d-e39c8d45cae9" />
+
+	Users
+
+	<img width="592" alt="Screenshot 2025-02-01 at 5 24 57 PM" src="https://github.com/user-attachments/assets/e7d8366e-0a1e-4fcf-9038-087428cabad1" /> 
+
+	Transactions
+
+	<img width="585" alt="Screenshot 2025-02-03 at 2 18 06 PM" src="https://github.com/user-attachments/assets/7969c21c-8aed-4571-b469-0e9c78055ee9" />
+
 2) Some of the missing data appears to be from users or customers not sharing this data (such as the user’s gender, language, birth_date or product categories, manufacturers). How ever, there is also data missing that I presume to be due to errors on our data collection side. I believe that this is something that needs to be addressed.
 3) Duplicate and Null Primary Keys: BARCODE primary key in Products table has rows where different products have the same barcode or there are duplicate rows. This is an issue because the barcode is a primary key that connects products to the transactions table, so if there are duplicates
+   
+	<img width="788" alt="Screenshot 2025-02-01 at 5 21 11 PM" src="https://github.com/user-attachments/assets/aae62872-18f0-44ed-bc4c-bb4010815b53" />
+
+	<img width="774" alt="Screenshot 2025-02-01 at 5 21 29 PM" src="https://github.com/user-attachments/assets/6a03ae46-4d75-4004-9d2b-add4c092a616" />
+
    
 Questions:
 - How is the data collected for each of the tables? Is it user input or through the company’s data collection process? I want to analyze further the reason for the null values and duplicate rows.
 - For the user inputted data, could we make certain non-invasive information mandatory so that we have more complete data? Similar to how forms have the red asterisks for mandatory information.
 
 **Noteworthy Trend in the Data**:
-- Users by generation: I found it interesting the breakdown of the users by generation. As you can see from the table provided in section 2, most of the users are from the Baby Boomer generation, followed by the Millennials, and then Generation X. My initial hypothesis was that it would increase in users through the newer generations, but that appears to not be the case. I believe this is an interesting trend to highlight because it allows us to pinpoint areas of potential growth and generations to target sales and marketing campaigns towards.
+
+Users by generation: I found it interesting the breakdown of the users by generation. As you can see from the table provided in section 2, most of the users are from the Baby Boomer generation, followed by the Millennials, and then Generation X. My initial hypothesis was that it would increase in users through the newer generations, but that appears to not be the case. I believe this is an interesting trend to highlight because it allows us to pinpoint areas of potential growth and generations to target sales and marketing campaigns towards.
 
 
 **Steps Moving Forward**
