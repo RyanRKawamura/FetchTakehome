@@ -57,6 +57,8 @@ b) Same barcode, different product/data
 - BARCODE : 5762 Null Values
 - FINAL_QUANTITY : 0 Null Values
 - FINAL_SALE : 0 Null Values
+  
+<img width="585" alt="Screenshot 2025-02-03 at 2 18 06 PM" src="https://github.com/user-attachments/assets/7969c21c-8aed-4571-b469-0e9c78055ee9" />
 
 **#2**: There is inconsistent data type for the FINAL_QUANTITY column, with 0 being a string type while the other values are decimal values of float type. This makes the data type inconsistent. 
 
@@ -75,16 +77,17 @@ This indicates a data quality issue because there are multiple of the same colum
 
 ## **2 Provide SQL Queries**
 ### Closed-ended question
-What are the top 5 brands by receipts scanned among users 21 and over
+
+#### What are the top 5 brands by receipts scanned among users 21 and over
 
 ```sh
 SELECT 		brand, 
-          count(brand) as count_receipt_scanned
+          	count(brand) as count_receipt_scanned
 FROM 		users as u
 RIGHT JOIN 	transactions as t
-ON			u.id = t.user_id
+ON		u.id = t.user_id
 LEFT JOIN 	products as p
-ON			p.barcode = t.barcode
+ON		p.barcode = t.barcode
 WHERE 		DATEDIFF(CURDATE(), BIRTH_DATE) / 365 >= 21
 GROUP BY 	BRAND 
 ORDER BY 	count(brand) desc, brand asc  #For ties
@@ -92,38 +95,39 @@ LIMIT 5;
 ```
 <img width="361" alt="Screenshot 2025-02-03 at 10 30 55 AM" src="https://github.com/user-attachments/assets/2f8ea643-1245-4e90-9e03-bb28d5f8cfdc" />
 
-What are the top 5 brands by sales among users that have had their account for at least six months
+#### What are the top 5 brands by sales among users that have had their account for at least six months
 
 ```sh
 SELECT 		p.brand, 
-			sum(t.FINAL_SALE) as total_sale
+		sum(t.FINAL_SALE) as total_sale
 FROM 		users as u
 RIGHT JOIN 	transactions as t
-ON			u.id = t.user_id
+ON		u.id = t.user_id
 LEFT JOIN 	products as p
-ON			p.barcode = t.barcode
+ON		p.barcode = t.barcode
 WHERE 		DATEDIFF(CURDATE(), BIRTH_DATE) >= 180 # assuming average days of 6 months is 180
-			and p.brand is not null
+		and p.brand is not null
 GROUP BY 	p.brand
 ORDER BY 	sum(t.FINAL_SALE) desc, brand asc # incase of tie
 LIMIT 5;
 ```
 <img width="268" alt="Screenshot 2025-02-03 at 10 31 55 AM" src="https://github.com/user-attachments/assets/c32e559d-e267-40ea-b646-4ff15d4970c4" />
 
-What is the percentage of sales in the Health and Wellness category by generation
+
+#### What is the percentage of sales in the Health and Wellness category by generation
 
 ```sh
 SELECT 		sum(IF(YEAR(BIRTH_DATE) BETWEEN 1928 and 1945, t.final_sale, 0))/sum(t.final_sale)*100 as Silent_Generation,
-			sum(IF(YEAR(BIRTH_DATE) BETWEEN 1946 and 1964, t.final_sale, 0))/sum(t.final_sale)*100 as Baby_Boomers,
-			sum(IF(YEAR(BIRTH_DATE) BETWEEN 1965 and 1980, t.final_sale, 0))/sum(t.final_sale)*100 as Generation_X,
-			sum(IF(YEAR(BIRTH_DATE) BETWEEN 1981 and 1996, t.final_sale, 0))/sum(t.final_sale)*100 as Milennials,
-			sum(IF(YEAR(BIRTH_DATE) BETWEEN 1997 and 2012, t.final_sale, 0))/sum(t.final_sale)*100 as Generation_Z,
-			sum(IF(YEAR(BIRTH_DATE) BETWEEN 2013 and YEAR(CURDATE()), t.final_sale, 0))/sum(t.final_sale)*100 as Gen_Alpha
+		sum(IF(YEAR(BIRTH_DATE) BETWEEN 1946 and 1964, t.final_sale, 0))/sum(t.final_sale)*100 as Baby_Boomers,
+		sum(IF(YEAR(BIRTH_DATE) BETWEEN 1965 and 1980, t.final_sale, 0))/sum(t.final_sale)*100 as Generation_X,
+		sum(IF(YEAR(BIRTH_DATE) BETWEEN 1981 and 1996, t.final_sale, 0))/sum(t.final_sale)*100 as Milennials,
+		sum(IF(YEAR(BIRTH_DATE) BETWEEN 1997 and 2012, t.final_sale, 0))/sum(t.final_sale)*100 as Generation_Z,
+		sum(IF(YEAR(BIRTH_DATE) BETWEEN 2013 and YEAR(CURDATE()), t.final_sale, 0))/sum(t.final_sale)*100 as Gen_Alpha
 FROM 		users as u
 RIGHT JOIN 	transactions as t
-ON			u.id = t.user_id
+ON		u.id = t.user_id
 LEFT JOIN 	products as p
-ON			p.barcode = t.barcode
+ON		p.barcode = t.barcode
 WHERE 		p.category_1 = 'Health & Wellness'
     		AND u.BIRTH_DATE IS NOT NULL; # assuming we are excluding null birthdays
 
@@ -133,8 +137,8 @@ WHERE 		p.category_1 = 'Health & Wellness'
 
 
 ## Open-ended questions
-**Who are Fetch's power users?**
-First, must define what makes a power user. Using my intuition plus external research and considering the data, I will consider power user to be the top 10 percentile of users who have spent the most through the app additionally how many times they interact with the app calculated through scans. My reasoning being that the 
+#### **Who are Fetch's power users?**
+In order to answer this question, I must define what makes a power user. Using my intuition plus external research and considering the data, I will consider power user to be the top 10 percentile of users who have spent the most through the app and the number of times they interact with the app calculated through scans. I believe that a power user will have visited the platform the most number of times as well as spent the most on through the platform because this show both engagement and monetary commitment. High visit frequency indicates habitual use and reliance on the platform, while high spending reflects the user’s perceived value of the service. By defining power users in this way, I can better analyze their behavior, identify patterns that differentiate them from regular users, and uncover potential strategies to retain and expand this valuable segment.
 
 ```sh
 WITH SpendingCTE AS (
@@ -142,20 +146,58 @@ WITH SpendingCTE AS (
         		SUM(t.final_sale) AS total_spent,
         		NTILE(10) OVER (order by SUM(t.final_sale) desc) AS percentile_spent
     FROM 		transactions AS t
-    GROUP BY 	t.user_id
+    GROUP BY 		t.user_id
 ),
 ScanningCTE AS (
     SELECT 		user_id,
         		COUNT(scan_date) AS number_of_scans,
         		NTILE(10) OVER (order by COUNT(scan_date) desc) AS percentile_scans
     FROM 		transactions
-    GROUP BY 	user_id
+    GROUP BY 		user_id
 ) 
 SELECT 		s.user_id,
     		s.total_spent,
     		sc.number_of_scans
 FROM 		SpendingCTE AS s
 JOIN 		ScanningCTE AS sc ON s.user_id = sc.user_id
-WHERE		s.percentile_spent = 1 OR sc.percentile_scans = 1
+WHERE		s.percentile_spent = 1 AND sc.percentile_scans = 1
 ORDER BY 	number_of_scans desc, total_spent desc;
 ```
+
+Here is a view of the first rows of the data frame. A full csv file is available down below
+<img width="555" alt="Screenshot 2025-02-03 at 1 16 13 PM" src="https://github.com/user-attachments/assets/2149e4cf-c328-489b-84f8-ac6268d1cf2a" />
+
+[full_powerusers.csv](https://github.com/user-attachments/files/18648277/full_powerusers.csv)
+
+
+## **3 Communicate with Stakeholders**
+
+"Hi Business Leader!
+
+I hope you are having a great Monday! Just wanted to send you an update on the data investigation you requested:
+
+**Key Data Quality Issues**:
+
+Issues
+1) Substantial Null Values Present: There are a significant amount of null values present in the data indicating a lack of data as well as inconsistent data that can potentially affect the accuracy of future analyses.
+2) Some of the missing data appears to be from users or customers not sharing this data (such as the user’s gender, language, birth_date or product categories, manufacturers). How ever, there is also data missing that I presume to be due to errors on our data collection side. I believe that this is something that needs to be addressed.
+3) Duplicate and Null Primary Keys: BARCODE primary key in Products table has rows where different products have the same barcode or there are duplicate rows. This is an issue because the barcode is a primary key that connects products to the transactions table, so if there are duplicates
+   
+Questions:
+- How is the data collected for each of the tables? Is it user input or through the company’s data collection process? I want to analyze further the reason for the null values and duplicate rows.
+- For the user inputted data, could we make certain non-invasive information mandatory so that we have more complete data? Similar to how forms have the red asterisks for mandatory information.
+
+**Noteworthy Trend in the Data**:
+- Users by generation: I found it interesting the breakdown of the users by generation. As you can see from the table provided in section 2, most of the users are from the Baby Boomer generation, followed by the Millennials, and then Generation X. My initial hypothesis was that it would increase in users through the newer generations, but that appears to not be the case. I believe this is an interesting trend to highlight because it allows us to pinpoint areas of potential growth and generations to target sales and marketing campaigns towards.
+
+
+**Steps Moving Forward**
+
+I believe that many of the data quality issues we’re facing can be resolved within the team, ultimately leading to more accurate data and analyses. My next step is to collaborate with the teams responsible for managing the different databases to identify the root causes of duplicate rows and duplicate primary keys. From there, I will work with them to implement solutions that prevent these issues from recurring in the future.
+
+This is just a quick summary of the results of my investigation. I’d be happy to answer any further questions you have about my analyses or any feedback you have! 
+
+Best, 
+Ryan
+“
+
